@@ -1,0 +1,686 @@
+$ ls -l test/dashboard/goldens
+total 1108
+-rw-rw-r-- 1 ali-juelon ali-juelon  93109 Nov  5 23:40 empty_sensors_360.png
+-rw-rw-r-- 1 ali-juelon ali-juelon 166460 Nov  5 23:40 empty_sensors_800.png
+-rw-rw-r-- 1 ali-juelon ali-juelon  97204 Nov  5 23:40 healthy_360.png
+-rw-rw-r-- 1 ali-juelon ali-juelon 189640 Nov  5 23:40 healthy_800.png
+-rw-rw-r-- 1 ali-juelon ali-juelon  94011 Nov  5 23:40 partial_360.png
+-rw-rw-r-- 1 ali-juelon ali-juelon 188188 Nov  5 23:40 partial_800.png
+-rw-rw-r-- 1 ali-juelon ali-juelon  99646 Nov  5 23:40 stale_360.png
+-rw-rw-r-- 1 ali-juelon ali-juelon 194867 Nov  5 23:40 stale_800.png
+
+$ flutter test test/dashboard
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart
+00:00 +0: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine shows the skeleton before the fetcher completes
+00:00 +1: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine shows the skeleton before the fetcher completes
+00:00 +2: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: tapping 60 then confirming resolves the sheet with 60
+00:01 +3: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine renders content when the fetcher resolves
+00:01 +4: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: close button is >= 48x48 and dismisses with no value
+00:01 +5: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: close button is >= 48x48 and dismisses with no value
+00:01 +6: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +7: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +8: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +9: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: copy names Pompa Irigasi and never mentions melon
+00:01 +10: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine pollInterval null leaves no pending timer
+00:01 +11: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: 320dp at 1.3x text scale renders without overflow
+00:01 +12: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine isActive false never starts polling (exactly one call)
+00:01 +13: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine hung fetcher times out after 4s instead of freezing
+00:01 +14: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine rejected relay command reverts and surfaces the server message
+00:02 +15: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: relaySpecs has 6 ESP32 channels, first four protected
+00:02 +16: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: tapping the card body calls onToggle exactly once
+00:03 +17: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +18: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +18: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: semantics expose a toggled button labelled with name+status
+--- semantics tree ---
+SemanticsNode#5
+   Rect.fromLTRB(220.0, 16.0, 580.0, 142.0)
+   actions: tap
+   flags: isButton, hasToggledState, isToggled
+   label: "Dosing Pupuk A, Aktif"
+   textDirection: ltr
+
+----------------------
+00:03 +19: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +19: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: off + protected reports toggled: false and "Terlindungi"
+SemanticsNode#5
+   Rect.fromLTRB(220.0, 16.0, 580.0, 142.0)
+   actions: tap
+   flags: isButton, hasToggledState
+   label: "pH Down, Terlindungi"
+   textDirection: ltr
+
+00:03 +20: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +21: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +22: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +23: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:03 +24: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+360dp top-left dy -> card0=1292.0416354816737 card1=1292.0416354816737 card2=1460.0416354816737
+360dp card widths -> card0=158.0 card1=158.0
+00:03 +25: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 800dp lays the six relay cards out in three columns
+800dp top-left dy -> card0=892.0 card1=892.0 card2=892.0 card3=1030.0
+00:04 +26: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 320dp at 1.3x text scale renders six cards without overflow
+320dp/1.3x flutter errors -> []
+00:04 +27: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: actuator header renders at 360dp / 1.3x without overflow
+360dp/1.3x flutter errors -> []
+00:04 +28: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: "Atur Durasi" is at least a 48dp tap target
+"Atur Durasi" size -> 207.5399932861328 x 48.0
+00:04 +29: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +30: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +31: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +32: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +33: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +34: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +35: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +36: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +37: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +38: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +39: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +40: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:05 +41: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:05 +42: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:05 +43: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:05 +44: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:05 +45: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:05 +46: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: an empty payload replaces the body with the not-detected panel
+00:05 +47: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: soilOk false adds the Tanah bermasalah chip
+00:05 +48: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: offline payload shows the Basi freshness chip
+00:05 +49: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:05 +50: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline lastSeen 20 seconds ago is offline (default 15s threshold)
+00:05 +51: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline is_online false is offline even when lastSeen is fresh
+00:05 +52: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a missing lastSeen is offline
+00:05 +53: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline exactly 15 seconds old is still online, 1 ms later is offline
+00:05 +54: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a custom staleAfter window is honored
+00:05 +55: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention pH 4.9 needs attention and reports the pH reason
+00:05 +56: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention temperature above the 24-30 C band needs attention
+00:05 +57: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention humidity below the 60-80 % band needs attention
+00:05 +58: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention EC below 300 needs attention
+00:05 +59: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil moisture below 40 % needs attention
+00:05 +60: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil_ok false needs attention even when all readings look fine
+00:05 +61: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention multiple faults produce multiple reasons in priority order
+00:05 +62: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal every reading inside the envelope is optimal
+00:05 +63: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal values exactly on the bounds are still optimal
+00:05 +64: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings null readings never produce a reason and never force attention
+00:05 +65: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings an empty JSON payload is offline, not attention
+00:05 +66: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings partial payload keeps null metrics silent while flagging known faults
+00:05 +67: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: attentionReasons - immutability the returned list cannot be mutated
+00:06 +68: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: (setUpAll)
+00:06 +68: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 360
+00:06 +69: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 360
+00:07 +70: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: DashboardHeader last_seen 20s in the past resolves to the Offline chip
+00:07 +71: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:07 +72: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:07 +73: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:07 +74: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: DashboardHeader the refresh button measures at least 48x48 and fires
+00:07 +75: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:07 +76: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:07 +77: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:07 +78: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: SummaryStrip header + strip: no overflow at 360dp with TextScaler 1.3
+00:07 +79: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: partial 360
+00:07 +80: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 800
+00:07 +81: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 800
+00:08 +82: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:08 +83: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:08 +84: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:08 +85: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: null readings render an em dash, never 0.0
+00:08 +86: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: offline status shows the Offline pill and is announced
+00:08 +87: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: attention status shows the Perlu perhatian pill
+00:08 +88: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:08 +89: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:08 +90: All tests passed!
+
+$ flutter test test/dashboard/dashboard_golden_test.dart (run 2 - determinism check)
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: golden: healthy 360
+00:00 +1: golden: stale 360
+00:01 +2: golden: empty_sensors 360
+00:01 +3: golden: partial 360
+00:01 +4: golden: healthy 800
+00:01 +5: golden: stale 800
+00:01 +6: golden: empty_sensors 800
+00:01 +7: golden: partial 800
+00:02 +8: (tearDownAll)
+00:02 +8: All tests passed!
+
+$ flutter analyze
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 4.1s)
+
+$ cp lib/core/theme/app_colors.dart /tmp/antigravity/app_colors.dart.bak && sha256sum lib/core/theme/app_colors.dart /tmp/antigravity/app_colors.dart.bak
+d991c96b766b32bb5bcf1b922b25d0ca237ab4b1cc263e5f0f6c2c8be4633996  lib/core/theme/app_colors.dart
+d991c96b766b32bb5bcf1b922b25d0ca237ab4b1cc263e5f0f6c2c8be4633996  /tmp/antigravity/app_colors.dart.bak
+
+$ # mutate card to Color(0xFFFFF0F0) and run golden test (must FAIL)
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: golden: healthy 360
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/healthy_360.png": Pixel test failed, 43.37%, 124911px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:130:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: golden: healthy 360 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: healthy 360
+  
+00:01 +0 -1: golden: stale 360
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/stale_360.png": Pixel test failed, 34.73%, 100032px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:177:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -2: golden: stale 360 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: stale 360
+  
+00:01 +0 -2: golden: empty_sensors 360
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/empty_sensors_360.png": Pixel test failed, 28.12%, 80995px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:200:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -3: golden: empty_sensors 360 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: empty_sensors 360
+  
+00:01 +0 -3: golden: partial 360
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/partial_360.png": Pixel test failed, 43.41%, 125018px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:219:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -4: golden: partial 360 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: partial 360
+  
+00:02 +0 -4: golden: healthy 800
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/healthy_800.png": Pixel test failed, 42.04%, 430444px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:130:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:02 +0 -5: golden: healthy 800 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: healthy 800
+  
+00:02 +0 -5: golden: stale 800
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/stale_800.png": Pixel test failed, 42.04%, 430444px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:177:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:03 +0 -6: golden: stale 800 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: stale 800
+  
+00:03 +0 -6: golden: empty_sensors 800
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/empty_sensors_800.png": Pixel test failed, 30.68%, 314189px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:200:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +0 -7: golden: empty_sensors 800 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: empty_sensors 800
+  
+00:04 +0 -7: golden: partial 800
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following assertion was thrown while running async test code:
+Golden "goldens/partial_800.png": Pixel test failed, 44.64%, 457126px diff detected.
+Failure feedback can be found at
+/home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/failures
+
+When the exception was thrown, this was the stack:
+#0      LocalFileComparator.compare (package:flutter_test/src/_goldens_io.dart:108:5)
+<asynchronous suspension>
+#1      MatchesGoldenFile.matchAsync.<anonymous closure> (package:flutter_test/src/_matchers_io.dart:124:32)
+<asynchronous suspension>
+<asynchronous suspension>
+#3      _expect.<anonymous closure> (package:matcher/src/expect/expect.dart:153:17)
+<asynchronous suspension>
+<asynchronous suspension>
+#5      expectLater.<anonymous closure> (package:flutter_test/src/widget_tester.dart:508:19)
+<asynchronous suspension>
+#6      main.<anonymous closure> (file:///home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart:219:7)
+<asynchronous suspension>
+#7      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#8      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1682:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 3 frames from dart:async and package:stack_trace)
+
+The exception was caught asynchronously.
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:04 +0 -8: golden: partial 800 [E]
+  Test failed. See exception logs above.
+  The test description was: golden: partial 800
+  
+00:04 +0 -8: (tearDownAll)
+00:04 +0 -8: Some tests failed.
+
+$ cp /tmp/antigravity/app_colors.dart.bak lib/core/theme/app_colors.dart && rm -rf test/dashboard/failures /tmp/antigravity/app_colors.dart.bak && sha256sum lib/core/theme/app_colors.dart
+d991c96b766b32bb5bcf1b922b25d0ca237ab4b1cc263e5f0f6c2c8be4633996  lib/core/theme/app_colors.dart
+
+$ flutter test test/dashboard/dashboard_golden_test.dart (after restore)
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart
+00:00 +0: (setUpAll)
+00:00 +0: golden: healthy 360
+00:00 +1: golden: stale 360
+00:01 +2: golden: empty_sensors 360
+00:01 +3: golden: partial 360
+00:01 +4: golden: healthy 800
+00:01 +5: golden: stale 800
+00:01 +6: golden: empty_sensors 800
+00:02 +7: golden: partial 800
+00:02 +8: (tearDownAll)
+00:02 +8: All tests passed!
+
+$ grep -rn 'DateTime.now\|Image.network' test/support/fake_dashboard.dart test/dashboard/dashboard_golden_test.dart || echo '0 matches'
+0 matches

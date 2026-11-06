@@ -1,0 +1,263 @@
+TASK 13: dead code cleanup + final sweep
+WORKDIR: /home/ali-juelon/flutter/green_house_project/Green_House_App
+
+$ rm -v lib/features/dashboard/presentation/widgets/status_banner_card.dart lib/features/dashboard/presentation/widgets/sensor_metric_card.dart
+removed 'lib/features/dashboard/presentation/widgets/status_banner_card.dart'
+removed 'lib/features/dashboard/presentation/widgets/sensor_metric_card.dart'
+(pre-delete: both files only referenced themselves; dashboard_page.dart imports climate/header/npk/relay/summary/timer only)
+
+Token swaps in dashboard_page.dart _buildSkeletonLoader (skeleton not rendered in any golden):
+  BorderRadius.circular(20) -> AppRadius.radiusXl2 (20, identical)
+  BorderRadius.circular(16) x2 -> AppRadius.radiusXl (16, identical)
+  BorderRadius.circular(6) -> AppRadius.radiusLg (8)
+  SizedBox(width: 10) -> SizedBox(width: AppSpacing.gutterSm) (12; matches relay grid gap)
+Left as-is: stale banner BorderRadius.circular(12) (rendered in stale goldens, no 12 radius token); dialog already token-only.
+dashboard_header.dart doc comment reworded (literal 'fontSize:' text in comment tripped the anti-hardcode grep).
+
+$ dart format lib/features/dashboard lib/core/theme lib/shared/widgets lib/main.dart test
+Formatted lib/features/dashboard/presentation/widgets/relay_control_card.dart
+Formatted lib/core/theme/app_theme.dart
+Formatted test/dashboard/dashboard_golden_test.dart
+Formatted test/dashboard/relay_card_test.dart
+Formatted test/dashboard/timer_sheet_test.dart
+Formatted 34 files (5 changed) in 0.25 seconds.
+
+$ grep -rn "status_banner_card\|sensor_metric_card\|StatusBannerCard\|SensorMetricCard" lib test | wc -l
+0
+$ grep -rn "Positioned(" lib/features/dashboard | wc -l
+0
+$ grep -rn "Color(0x" lib/features/dashboard | wc -l
+0
+$ grep -rn "fontSize:" lib/features/dashboard | grep -v "AppTextStyles" | wc -l
+0
+$ grep -rn "Duration(milliseconds" lib/features/dashboard | wc -l
+0
+$ grep -rn "Color(0x\|Positioned(\|Duration(milliseconds" lib/features/dashboard | wc -l
+0
+$ grep -rn "_PulsingDot" lib
+lib/shared/widgets/app_bar_widget.dart:236:                            _PulsingDot(color: AppColors.success, size: 6)
+lib/shared/widgets/app_bar_widget.dart:291:class _PulsingDot extends StatefulWidget {
+lib/shared/widgets/app_bar_widget.dart:295:  const _PulsingDot({required this.color, required this.size});
+lib/shared/widgets/app_bar_widget.dart:298:  State<_PulsingDot> createState() => _PulsingDotState();
+lib/shared/widgets/app_bar_widget.dart:301:class _PulsingDotState extends State<_PulsingDot>
+
+=== FAILURE PROBE (anti-hardcode gate) ===
+$ cp lib/features/dashboard/presentation/widgets/summary_strip.dart /tmp/antigravity/summary_strip.bak && echo '// fontSize: 9' >> lib/features/dashboard/presentation/widgets/summary_strip.dart
+$ grep -rn "fontSize:" lib/features/dashboard | grep -v "AppTextStyles"
+lib/features/dashboard/presentation/widgets/summary_strip.dart:153:// fontSize: 9
+$ ... | wc -l
+1
+$ cp /tmp/antigravity/summary_strip.bak lib/features/dashboard/presentation/widgets/summary_strip.dart && rm /tmp/antigravity/summary_strip.bak
+$ grep -rn "fontSize:" lib/features/dashboard | grep -v "AppTextStyles" | wc -l
+0
+
+$ flutter analyze
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 5.5s)
+
+$ flutter test
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart
+00:00 +0: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine shows the skeleton before the fetcher completes
+00:01 +1: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine shows the skeleton before the fetcher completes
+00:01 +2: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: tapping 60 then confirming resolves the sheet with 60
+00:01 +3: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine renders content when the fetcher resolves
+00:01 +4: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine renders content when the fetcher resolves
+00:01 +5: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: every duration chip is at least a 48x48 tap target
+00:01 +6: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: every duration chip is at least a 48x48 tap target
+00:01 +7: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +8: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +9: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +10: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: 320dp at 1.3x text scale renders without overflow
+00:02 +11: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart: 320dp at 1.3x text scale renders without overflow
+00:02 +12: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine isActive false never starts polling (exactly one call)
+00:02 +13: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine hung fetcher times out after 4s instead of freezing
+00:02 +14: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart: DashboardPage state machine rejected relay command reverts and surfaces the server message
+00:03 +15: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: relaySpecs has 6 ESP32 channels, first four protected
+00:03 +16: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: tapping the card body calls onToggle exactly once
+00:04 +17: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:04 +18: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:04 +18: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: semantics expose a toggled button labelled with name+status
+--- semantics tree ---
+SemanticsNode#5
+   Rect.fromLTRB(220.0, 16.0, 580.0, 142.0)
+   actions: tap
+   flags: isButton, hasToggledState, isToggled
+   label: "Dosing Pupuk A, Aktif"
+   textDirection: ltr
+
+----------------------
+00:04 +19: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:04 +19: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/relay_card_test.dart: off + protected reports toggled: false and "Terlindungi"
+SemanticsNode#5
+   Rect.fromLTRB(220.0, 16.0, 580.0, 142.0)
+   actions: tap
+   flags: isButton, hasToggledState
+   label: "pH Down, Terlindungi"
+   textDirection: ltr
+
+00:04 +20: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:04 +21: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:05 +22: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:05 +23: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+00:05 +24: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 360dp lays the six relay cards out in two columns
+360dp top-left dy -> card0=1292.0416354816737 card1=1292.0416354816737 card2=1460.0416354816737
+360dp card widths -> card0=158.0 card1=158.0
+00:05 +25: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 800dp lays the six relay cards out in three columns
+800dp top-left dy -> card0=892.0 card1=892.0 card2=892.0 card3=1030.0
+00:05 +26: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: 320dp at 1.3x text scale renders six cards without overflow
+320dp/1.3x flutter errors -> []
+00:06 +27: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:06 +27: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: actuator header renders at 360dp / 1.3x without overflow
+360dp/1.3x flutter errors -> []
+00:06 +28: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:06 +28: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart: "Atur Durasi" is at least a 48dp tap target
+"Atur Durasi" size -> 207.5399932861328 x 48.0
+00:06 +29: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: full payload renders N/P/K tiles and all four secondary metrics
+00:07 +30: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: null readings render an em dash and no alarm text
+00:07 +31: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: an empty payload replaces the body with the not-detected panel
+00:07 +32: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: soilOk false adds the Tanah bermasalah chip
+00:07 +33: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: offline payload shows the Basi freshness chip
+00:07 +34: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:07 +35: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - happy path reads every sensor, relay, and AI field from the real payload
+00:07 +36: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - happy path parses a last_seen value with an explicit UTC offset
+00:07 +37: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input empty payload yields nulls, six false relays, and auto mode
+00:07 +38: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input a short target_relays list is padded to six entries
+00:07 +39: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input a long target_relays list is truncated to six entries
+00:07 +40: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input single-entry target_relays (old RangeError payload) does not throw
+00:07 +41: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input garbage types never throw and collapse to safe defaults
+00:07 +42: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input non-boolean relay entries fall back to false
+00:07 +43: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - numeric coercion numeric strings are parsed, non-numeric strings become null
+00:07 +44: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - numeric coercion non-finite numbers become null instead of NaN/Infinity
+00:07 +45: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode ai.mode wins over the legacy ai_mode key
+00:07 +46: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode legacy ai_mode is used when ai.mode is absent
+00:07 +47: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode missing AI block falls back to auto
+00:07 +48: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot - immutability relay lists cannot be mutated after construction
+00:07 +49: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot - immutability direct construction normalizes relay lists too
+00:07 +50: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline lastSeen 20 seconds ago is offline (default 15s threshold)
+00:07 +51: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline is_online false is offline even when lastSeen is fresh
+00:07 +52: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a missing lastSeen is offline
+00:08 +53: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline exactly 15 seconds old is still online, 1 ms later is offline
+00:08 +54: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a custom staleAfter window is honored
+00:08 +55: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention pH 4.9 needs attention and reports the pH reason
+00:08 +56: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention temperature above the 24-30 C band needs attention
+00:08 +57: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention humidity below the 60-80 % band needs attention
+00:08 +58: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention EC below 300 needs attention
+00:08 +59: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil moisture below 40 % needs attention
+00:08 +60: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil_ok false needs attention even when all readings look fine
+00:08 +61: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention multiple faults produce multiple reasons in priority order
+00:08 +62: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal every reading inside the envelope is optimal
+00:08 +63: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal values exactly on the bounds are still optimal
+00:08 +64: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings null readings never produce a reason and never force attention
+00:08 +65: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings an empty JSON payload is offline, not attention
+00:08 +66: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings partial payload keeps null metrics silent while flagging known faults
+00:08 +67: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: attentionReasons - immutability the returned list cannot be mutated
+00:08 +68: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: (setUpAll)
+00:08 +68: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 360
+00:09 +69: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 360
+00:09 +70: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: DashboardHeader last_seen 20s in the past resolves to the Offline chip
+00:09 +71: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:09 +72: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:09 +73: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 360
+00:09 +74: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: DashboardHeader the refresh button measures at least 48x48 and fires
+00:09 +75: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:10 +76: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:10 +77: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: empty_sensors 360
+00:10 +78: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_header_test.dart: SummaryStrip header + strip: no overflow at 360dp with TextScaler 1.3
+00:10 +79: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: partial 360
+00:10 +80: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: healthy 800
+00:10 +81: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_golden_test.dart: golden: stale 800
+00:11 +82: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:11 +83: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:11 +84: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: renders the temperature and humidity readings
+00:12 +85: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: null readings render an em dash, never 0.0
+00:12 +86: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: offline status shows the Offline pill and is announced
+00:12 +87: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: attention status shows the Perlu perhatian pill
+00:12 +88: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:12 +88: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/theme/contrast_test.dart: AppColors WCAG contrast measured ratios (printed for the record)
+pair                              ratio   required
+textPrimary/card                  14.68       4.5
+textSecondary/card                 7.56       4.5
+textMuted/card                     5.61       4.5
+onPrimary/primary                  7.45       4.5
+onPrimary/accent                   3.20       3.0
+error/card                         6.46       4.5
+onSurface/canvas                  15.85       4.5
+onSurface/cardMuted               15.35       4.5
+warningInk/card                    5.93       4.5
+successInk/card                    6.43       4.5
+infoInk/card                       7.21       4.5
+accentInk/card                     7.08       4.5
+dangerInk/card                     6.54       4.5
+warningInk/warningSurface          5.58       4.5
+successInk/successSurface          5.72       4.5
+infoInk/infoSurface                6.42       4.5
+accentInk/accentSoft               6.24       4.5
+dangerInk/dangerSurface            5.72       4.5
+
+FILL-ONLY tokens — measured for the record, NOT text colours:
+warning                            2.04  (fill — never small text)
+success                            4.12  (fill — never small text)
+info                               3.86  (fill — never small text)
+accent                             3.20  (fill — never small text)
+danger                             4.98  (fill — never small text)
+00:12 +89: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/theme/contrast_test.dart: AppColors WCAG contrast measured ratios (printed for the record)
+00:12 +90: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +91: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +92: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +93: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +94: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +95: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +96: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +97: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +98: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +99: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +100: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +101: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +102: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +103: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +104: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +105: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +106: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +107: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +108: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +108: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/theme/contrast_test.dart: AppColors WCAG contrast every *Ink token is >= 4.5:1 on card AND on its own soft surface
+ink pair                          card    soft   min
+warningInk/warningSurface         5.927   5.579   4.5
+successInk/successSurface         6.431   5.717   4.5
+infoInk/infoSurface               7.211   6.419   4.5
+accentInk/accentSoft              7.077   6.240   4.5
+dangerInk/dangerSurface           6.536   5.718   4.5
+worst ink: warningInk 5.579:1 (floor 4.5:1)
+00:12 +109: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +109: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/theme/contrast_test.dart: AppColors WCAG contrast each ink token is darker than the fill it replaces
+warningInk luminance 0.1272 < fill 0.4640
+successInk luminance 0.1133 < fill 0.2051
+infoInk luminance 0.0956 < fill 0.2222
+accentInk luminance 0.0984 < fill 0.2786
+dangerInk luminance 0.1106 < fill 0.1609
+00:12 +110: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/climate_hero_test.dart: a new reading cross-fades in without leaving stale text
+00:12 +111: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/theme/contrast_test.dart: AppColors WCAG contrast heroGradient has exactly 3 stops (topLeft → bottomRight)
+00:12 +112: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart
+00:17 +112: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+00:18 +112: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: body never slides under the AppBar or the dock (no inset)
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 80.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+[shell_layout] appBar bar size = Size(320.0, 64.0), dock slot size = Size(360.0, 86.0), dock bar size = Size(320.0, 66.0)
+00:18 +112: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+[widget_test] DashboardPage rect = Rect.fromLTRB(0.0, 80.0, 800.0, 514.0) (appBar slot 80.0, old magic 64)
+00:18 +113: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+00:18 +114: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: nav items and avatar expose semantics
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 80.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+00:18 +115: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: body follows the status-bar inset on top of the AppBar slot
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 104.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+00:19 +116: All tests passed!
+exit=0

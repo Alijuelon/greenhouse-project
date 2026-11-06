@@ -1,0 +1,158 @@
+Task 7 — shell alignment: tokens, correct insets, Semantics, injection
+Workspace: /home/ali-juelon/flutter/green_house_project/Green_House_App
+Scope edited: lib/main.dart, lib/shared/widgets/app_bar_widget.dart,
+  lib/shared/widgets/bottom_nav_bar.dart, test/widget_test.dart,
+  test/shared/shell_layout_test.dart (new)
+No theme file, no lib/features/** file, no api_service.dart was modified.
+================================================================================
+0. TOOLCHAIN
+================================================================================
+Flutter 3.41.6 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision db50e20168 (8 months ago) • 2026-03-25 16:21:00 -0700
+Engine • hash 5cdd32777948fa7a648fac915f8da7120ac7e97a (revision 425cfb54d0) (7 months ago) • 2026-03-25 20:14:42.000Z
+
+================================================================================
+1. flutter analyze
+================================================================================
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 3.4s)
+
+================================================================================
+2. flutter test test/widget_test.dart test/shared/shell_layout_test.dart
+   (geometry numbers printed by the tests are shown verbatim)
+================================================================================
+Resolving dependencies...
+Downloading packages...
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart
+00:00 +0: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+00:01 +0: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: body never slides under the AppBar or the dock (no inset)
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 80.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+[shell_layout] appBar bar size = Size(320.0, 64.0), dock slot size = Size(360.0, 86.0), dock bar size = Size(320.0, 66.0)
+00:01 +1: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+00:01 +1: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: nav items and avatar expose semantics
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 80.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+00:01 +2: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+00:02 +2: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/shared/shell_layout_test.dart: body follows the status-bar inset on top of the AppBar slot
+[shell_layout] body probe rect = Rect.fromLTRB(0.0, 104.0, 360.0, 714.0) (surface Size(360.0, 800.0))
+00:02 +3: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/widget_test.dart: App smoke test - verifies MainShell loads properly
+[widget_test] DashboardPage rect = Rect.fromLTRB(0.0, 80.0, 800.0, 514.0) (appBar slot 80.0, old magic 64)
+00:02 +4: All tests passed!
+[exit=0]
+
+================================================================================
+3. No 'Failed to fetch settings for app bar' in the shell suite
+   (the loader failure is now a silent fallback, not console noise)
+================================================================================
+$ flutter test test/widget_test.dart test/shared/shell_layout_test.dart | grep -c 'Failed to fetch settings for app bar'
+0
+
+================================================================================
+4. grep -rn "GestureDetector" lib/shared/widgets/bottom_nav_bar.dart
+================================================================================
+$ grep -rn GestureDetector lib/shared/widgets/bottom_nav_bar.dart   # expect 0
+[grep exit=1 -> 1 means zero matches]
+
+$ grep -n InkWell lib/shared/widgets/bottom_nav_bar.dart
+139:    return Semantics(
+143:      child: ExcludeSemantics(
+153:            child: InkWell(
+
+================================================================================
+5. grep -n "64\|84" lib/shared/widgets/app_bar_widget.dart
+================================================================================
+$ grep -n '64\|84' lib/shared/widgets/app_bar_widget.dart   # expect 0
+[grep exit=1 -> 1 means zero matches]
+
+Justification: the three literals are gone, replaced 1:1 by tokens —
+  old 16  (top padding)        -> AppSpacing.spaceLg       (=16, identical)
+  old 64  (bar height)         -> AppSpacing.appBarHeight   (=64, identical)
+  old 84  (preferredSize)      -> AppSpacing.appBarOuterHeight (=80)
+The 84 -> 80 change does NOT shrink the painted bar: the bar container keeps
+its 64 logical px, the slot becomes exactly the content height
+(SafeArea inset + 16 + 64), asserted below via getSize == Size(320, 64).
+
+$ grep -n 'appBarHeight\|appBarOuterHeight' lib/shared/widgets/app_bar_widget.dart
+28:  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarOuterHeight);
+117:              height: AppSpacing.appBarHeight,
+
+================================================================================
+6. main.dart uses the shell tokens, no magic 64
+================================================================================
+$ grep -n 'appBarOuterHeight\|navBarOuterHeight\|padding.top\|padding.bottom' lib/main.dart
+82:            top: mediaQuery.padding.top + AppSpacing.appBarOuterHeight,
+83:            bottom: AppSpacing.navBarOuterHeight + mediaQuery.padding.bottom,
+$ grep -n '64' lib/main.dart   # expect no inset literal
+[grep exit=1 -> 1 means zero matches]
+
+$ grep -n 'DashboardPage(isActive' lib/main.dart
+60:    DashboardPage(isActive: _currentIndex == 0),
+
+================================================================================
+7. ADVERSARIAL: stale_state — prove the old 64 magic number is really gone
+   Temporarily restore the pre-task inset (64/64) in main.dart, re-run the
+   smoke test: it must FAIL with 64 where 80 is required. Then restore.
+================================================================================
+$ sed -i 's/AppSpacing.appBarOuterHeight/64/g; s/AppSpacing.navBarOuterHeight/64/g' lib/main.dart
+82:            top: mediaQuery.padding.top + 64,
+83:            bottom: 64 + mediaQuery.padding.bottom,
+$ flutter test test/widget_test.dart
+[widget_test] DashboardPage rect = Rect.fromLTRB(0.0, 64.0, 800.0, 536.0) (appBar slot 80.0, old magic 64)
+Expected: <80.0>
+  Actual: <64.0>
+  Test failed. See exception logs above.
+00:02 +0 -1: Some tests failed.
+$ diff /tmp/opencode/main.dart.bak lib/main.dart   # restored
+RESTORED-IDENTICAL
+
+================================================================================
+8. ADVERSARIAL: network_dependency — prove the shell test is hermetic
+   (a) test/widget_test.dart installs HttpOverrides that throw on every
+       createHttpClient; (b) a throwaway test proves that override really
+       blocks ApiService.getSettings(), so no socket ever leaves the process.
+================================================================================
+$ sed -n '7,20p;28,40p' test/widget_test.dart
+import 'package:green_house_app/main.dart';
+
+/// Fails every socket attempt instead of opening one, so the smoke test stays
+/// hermetic: nothing in the shell (settings chrome, dashboard polling, avatars)
+/// may depend on a reachable server.
+class _RejectingHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    throw const SocketException('network disabled for widget tests');
+  }
+}
+
+void main() {
+  setUp(() => HttpOverrides.global = _RejectingHttpOverrides());
+    await tester.pump();
+
+    expect(find.byType(MainShell), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    // Shell inset proof: the first page starts below the AppBar slot, not below
+    // the old flat 64 magic number.
+    final Rect dashboard = tester.getRect(find.byType(DashboardPage));
+    // ignore: avoid_print
+    print(
+      '[widget_test] DashboardPage rect = $dashboard '
+      '(appBar slot ${AppSpacing.appBarOuterHeight}, old magic 64)',
+    );
+$ flutter test test/tmp_network_probe_test.dart   # throwaway probe
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/tmp_network_probe_test.dart
+00:00 +0: rejecting HttpOverrides makes ApiService.getSettings fail locally
+00:00 +1: All tests passed!
+$ rm -f test/tmp_network_probe_test.dart ; ls test
+dashboard
+shared
+theme
+widget_test.dart
+
+================================================================================
+9. flutter test   (full suite)
+================================================================================

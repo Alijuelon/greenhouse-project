@@ -1,0 +1,143 @@
+# Task 6 — Section aktuator + grid responsif (2/3 kolom) memakai LayoutBuilder
+
+Plan: .omo/plans/dashboard-modern-redesign.md, row "- [ ] 6."
+Working dir: /home/ali-juelon/flutter/green_house_project/Green_House_App
+Date: 2026-11-05
+
+## Files changed
+- lib/features/dashboard/presentation/pages/dashboard_page.dart  (rewritten `_buildRelayHeader`, rewritten `_buildRelayGrid`, `_pendingRelays` wiring)
+- test/dashboard/dashboard_grid_test.dart                        (new: 5 widget tests)
+- test/dashboard/dashboard_page_test.dart                        (DEVIATION: 3 text assertions updated, see "Deviation" below)
+
+## What changed in dashboard_page.dart
+DELIVERABLE 1 — `_buildRelayHeader(BuildContext)`:
+- `Text('Kontrol Aktuator')` in AppTextStyles.headlineSm + AppColors.textPrimary.
+- Chip `'$activeCount / 6 aktif'`: bg AppColors.accentSoft, text AppColors.accentInk,
+  AppTextStyles.caption, AppRadius.radiusFull, padding EdgeInsets.symmetric(horizontal: 8, vertical: 3).
+- "Atur Durasi": Semantics(button:true, label:'Atur durasi pompa irigasi')
+  > Material(color: accentSoft, borderRadius: radiusXl, clipBehavior: Clip.antiAlias)
+  > InkWell(key: Key('dashboard-atur-durasi')) > ConstrainedBox(minHeight: minTapTarget)
+  > Padding(EdgeInsets.symmetric(horizontal: 14)) > Row(mainAxisSize: min)
+  > Icon(Icons.timer_outlined, size: 18, color: accentInk) + 6px + Text('Atur Durasi', labelLg/accentInk).
+  Removed: GestureDetector, hand-rolled Container, `Color(0x33000000)` boxShadow, AppColors.secondary/onSecondary.
+- Timer flow kept byte-for-byte: TimerBottomSheet.show(context) -> ApiService.setRelayTimer(5, mins*60)
+  -> snackbar (context.mounted guard) -> _fetchData(); catch -> 'Gagal mengatur timer: $e'.
+- Header wrapped in LayoutBuilder -> SizedBox(width: constraints.maxWidth) -> Wrap(spaceBetween,
+  runSpacing: spaceSm); title Text is Flexible so 360dp @1.3x reflows instead of overflowing.
+
+DELIVERABLE 2 — `_buildRelayGrid()`:
+- `buildIntrinsicGrid` deleted (whole helper, plus its `SizedBox(width: 10)` gutter and Row/Expanded pairs).
+- Now: LayoutBuilder -> cols = maxWidth >= 600 ? 3 : 2; gap = 12.0;
+  itemWidth = (maxWidth - gap*(cols-1)) / cols; Wrap(spacing/runSpacing: gap) of
+  SizedBox(width: itemWidth, child: RelayControlCard(...)). No GridView, no nested scrollable.
+
+DELIVERABLE 3 — per-relay pending state (TODO left by T10):
+- `final Set<int> _pendingRelays = <int>{};` added to `_DashboardPageState`.
+- `_toggleRelay`: `_pendingRelays.add(index)` in the same setState as the optimistic flip;
+  removed after `await _fetchData()` (success path, `if (!mounted) return;` guards) and in the
+  catch path before the snackbar.
+- Grid passes `isPending: _pendingRelays.contains(index)`; `// TODO(dashboard-redesign T6)` deleted.
+
+## Deviation from the task SCOPE (disclosed)
+The mandated chip copy changed from `'$activeCount Aktif / 6'` to `'$activeCount / 6 aktif'`, which is the
+only place in the app that produced the string `0 Aktif / 6`. Three assertions in the pre-existing
+test/dashboard/dashboard_page_test.dart were pinned to that exact string (lines 96, 257, 270) and failed
+after the mandated change. They were updated to `find.text('0 / 6 aktif')` — nothing else in that file was
+touched. Full failure output before the fix and the green run after are below.
+No other existing test file, theme file, widget, or main.dart was modified.
+
+## Verification commands + real output
+
+### 1. `flutter analyze`
+```
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 4.3s)
+```
+
+### 2. Scope greps
+```
+$ grep -c "buildIntrinsicGrid\|GestureDetector" lib/features/dashboard/presentation/pages/dashboard_page.dart
+0
+$ grep -c "Color(0x" lib/features/dashboard/presentation/pages/dashboard_page.dart
+0
+$ grep -n "GridView\|SizedBox(width: 10)" lib/features/dashboard/presentation/pages/dashboard_page.dart
+257:              const SizedBox(width: 10),
+667:    // A `Wrap` is used instead of a `GridView` because the page itself is the
+$ grep -n "TODO(dashboard-redesign" lib/features/dashboard/presentation/pages/dashboard_page.dart
+(no output above = TODO gone)
+```
+
+Interpretation of the two grep gates:
+- `buildIntrinsicGrid|GestureDetector` = 0 -> the hand-rolled grid and the ripple-less tap wrapper are gone.
+- `Color(0x` = 0 -> the ONLY literal in this file was the `Color(0x33000000)` boxShadow of the old
+  "Atur Durasi" pill, deleted with it. There is no remaining `Color(0x...)` literal anywhere in the file,
+  so no justification is needed.
+- `GridView` appears only inside a comment explaining why a `Wrap` is used instead; no `GridView` widget.
+- `SizedBox(width: 10)` = 1 remaining hit at line 257: that is the T4 *skeleton loader* gap between two
+  placeholder boxes, NOT the relay grid (pre-existing, out of T6 scope, untouched).
+
+### 3. `flutter test test/dashboard/dashboard_grid_test.dart`
+```
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_grid_test.dart
+00:00 +0: 360dp lays the six relay cards out in two columns
+360dp top-left dy -> card0=1292.0416354816737 card1=1292.0416354816737 card2=1460.0416354816737
+360dp card widths -> card0=158.0 card1=158.0
+00:01 +1: 800dp lays the six relay cards out in three columns
+800dp top-left dy -> card0=892.0 card1=892.0 card2=892.0 card3=1030.0
+00:02 +2: 320dp at 1.3x text scale renders six cards without overflow
+320dp/1.3x flutter errors -> []
+00:02 +3: actuator header renders at 360dp / 1.3x without overflow
+360dp/1.3x flutter errors -> []
+00:02 +4: "Atur Durasi" is at least a 48dp tap target
+"Atur Durasi" size -> 207.5399932861328 x 48.0
+00:02 +5: All tests passed!
+```
+
+Measured geometry (printed by the test, not just pass/fail):
+- 360dp: card0.dy = card1.dy = 1292.0416354816737, card2.dy = 1460.0416354816737 (2 columns, row 2 starts);
+        card widths 158.0 / 158.0 -> equal, i.e. no leftover 10px gutter:
+        content width 360-32 = 328; (328-12)/2 = 158.0 exactly.
+- 800dp: card0.dy = card1.dy = card2.dy = 892.0, card3.dy = 1030.0 (3 columns);
+        content width 800-32 = 768; (768-24)/3 = 248.0.
+- 320dp @ TextScaler.linear(1.3), 6 cards: captured FlutterError list = [] (no "RenderFlex overflowed"),
+  `tester.takeException()` null.
+- Header at 360dp @ 1.3x: captured FlutterError list = [], 'Kontrol Aktuator', '0 / 6 aktif',
+  'Atur Durasi' all found.
+- "Atur Durasi" tap target: height = 48.0 (minHeight AppSpacing.minTapTarget). Width 207.54 in the test
+  font (glyph-advance fallback), ~134dp with the bundled Inter face.
+  Note: the test harness has no bundled fonts loaded, so every glyph is 1em wide; that inflates text width
+  and is the strictest case for the overflow probes.
+
+### 4. `flutter test` (full suite)
+```
+00:16 +108: All tests passed!
+```
+Test count: 108 (103 pre-existing + 5 new). Previous baseline for this workstream was 103 passing after T11.
+
+### 5. `dart format`
+```
+$ dart format lib/features/dashboard/presentation/pages/dashboard_page.dart test/dashboard/dashboard_grid_test.dart test/dashboard/dashboard_page_test.dart
+Formatted lib/features/dashboard/presentation/pages/dashboard_page.dart
+Formatted test/dashboard/dashboard_grid_test.dart
+Formatted 3 files (2 changed) in 0.08 seconds.
+```
+(`dashboard_page_test.dart` already conformed; only my new file + the page were reformatted.)
+
+## Deviation repro (proof the assertion update was required, not cosmetic)
+
+Temporarily restoring the old assertion `find.text('0 Aktif / 6')` against the new header makes it fail,
+because the mandated chip copy is `0 / 6 aktif` and no other widget renders the old string:
+
+```
+$ flutter test test/dashboard/dashboard_page_test.dart --plain-name "renders content when the fetcher resolves"
+Expected: exactly one matching candidate
+  Actual: _TextWidgetFinder:<Found 0 widgets with text "0 Aktif / 6": []>
+00:01 +0 -1: Some tests failed.
+```
+exit=1. The assertion was then restored to `find.text('0 / 6 aktif')`
+(grep after restore: lines 96/258/271 all read `0 / 6 aktif`).

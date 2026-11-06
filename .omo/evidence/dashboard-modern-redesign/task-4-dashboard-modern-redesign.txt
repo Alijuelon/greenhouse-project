@@ -1,0 +1,49 @@
+TASK 4 - dashboard-modern-redesign - DashboardPage state layer
+date: 2026-11-05T17:21:34+07:00
+workdir: /home/ali-juelon/flutter/green_house_project/Green_House_App
+
+FILES CHANGED
+  lib/features/dashboard/presentation/pages/dashboard_page.dart   (state layer rewritten)
+  test/dashboard/dashboard_page_test.dart                        (new, 8 widget tests)
+
+=================== 1) flutter analyze ===================
+Analyzing Green_House_App...                                    
+No issues found! (ran in 2.6s)
+
+=================== 2) flutter test test/dashboard/dashboard_page_test.dart ===================
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_page_test.dart
+00:00 +0: DashboardPage state machine shows the skeleton before the fetcher completes
+00:00 +1: DashboardPage state machine renders content when the fetcher resolves
+00:00 +2: DashboardPage state machine renders a cold error when the fetcher rejects with no data
+00:00 +3: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails
+00:01 +4: DashboardPage state machine pollInterval null leaves no pending timer
+00:01 +5: DashboardPage state machine isActive false never starts polling (exactly one call)
+00:01 +6: DashboardPage state machine hung fetcher times out after 4s instead of freezing
+00:01 +7: DashboardPage state machine rejected relay command reverts and surfaces the server message
+00:01 +8: All tests passed!
+
+=================== 3) flutter test (full suite) ===================
+00:06 +55: All tests passed!
+
+
+=================== 4) ADVERSARIAL PROBE - do the tests actually measure? ===================
+Probe: (a) swallow the server rejection, (b) never render StaleBanner,
+       (c) drop the isActive gate from the poll timer. Expect exactly 3 failures.
+00:01 +3 -1: DashboardPage state machine keeps old data and shows StaleBanner when a later poll fails [E]
+00:01 +4 -2: DashboardPage state machine isActive false never starts polling (exactly one call) [E]
+00:02 +5 -3: DashboardPage state machine rejected relay command reverts and surfaces the server message [E]
+00:02 +5 -3: Some tests failed.
+-> probes restored; file back to committed content
+
+=================== 5) ADVERSARIAL PROBE - hung_or_long_commands / timeout ===================
+Probe: remove '.timeout(const Duration(seconds: 4))'. Expect the hung-fetcher test to fail
+       (page stays on the skeleton instead of reaching the error path).
+00:01 +6 -1: DashboardPage state machine hung fetcher times out after 4s instead of freezing [E]
+00:01 +7 -1: Some tests failed.
+-> timeout restored
+
+=================== 6) POST-RESTORE RE-VERIFY ===================
+Analyzing Green_House_App...                                    
+No issues found! (ran in 3.7s)
+00:02 +8: All tests passed!
+00:10 +55: All tests passed!

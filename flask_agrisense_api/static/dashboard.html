@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greenhouse AI Dashboard</title>
+
+<!-- Vue 3 -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+<!-- SheetJS (Excel) -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<!-- jsPDF + AutoTable (PDF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+:root{
+  --bg:#0f1720; --card:#1a2433; --line:#2a3547; --txt:#e8eef5; --dim:#8492a6;
+  --grn:#4ade80; --yel:#fbbf24; --red:#f87171; --blu:#60a5fa; --org:#fb923c; --pur:#a78bfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:16px;font-size:14px}
+.container{max-width:1400px;margin:0 auto}
+
+/* Header */
+header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;padding:16px 20px;background:var(--card);border-radius:10px;border:1px solid var(--line);margin-bottom:16px}
+h1{font-size:18px;font-weight:600;display:flex;align-items:center;gap:10px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--red);animation:none}
+.dot.on{background:var(--grn);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+input,select,button{font-family:inherit;font-size:13px;padding:8px 12px;border-radius:6px;border:1px solid var(--line);background:#141c28;color:var(--txt);outline:none}
+button{cursor:pointer;transition:.15s}
+button:hover{background:#243044}
+button.primary{background:#2c614f;border-color:#3a7a64}
+button.primary:hover{background:#3a7a64}
+button.export{background:#1e3a5f;border-color:#2c5282}
+button.export:hover{background:#2c5282}
+
+/* Badges */
+.badge{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.badge.auto{background:#14532d;color:#4ade80}
+.badge.shadow{background:#713f12;color:#fbbf24}
+.badge.off{background:#374151;color:#9ca3af}
+.badge.online{background:#14532d;color:#4ade80}
+.badge.offline{background:#7f1d1d;color:#fca5a5}
+.badge.ai{background:#14532d;color:#4ade80}
+.badge.expert{background:#374151;color:#d1d5db}
+.badge.shadow-src{background:#713f12;color:#fbbf24}
+
+/* Grid */
+.grid{display:grid;gap:12px;margin-bottom:16px}
+.grid.sensor{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.grid.dose{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.grid.perf{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.card .label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.card .value{font-size:24px;font-weight:700;line-height:1.1}
+.card .unit{font-size:13px;color:var(--dim);font-weight:400;margin-left:4px}
+.card .sub{font-size:11px;color:var(--dim);margin-top:6px}
+
+/* Section titles */
+h2{font-size:14px;font-weight:600;margin:20px 0 10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+h2:first-of-type{margin-top:0}
+
+/* Dose card */
+.dose-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;position:relative}
+.dose-card .name{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.dose-card .ml{font-size:28px;font-weight:700}
+.dose-card .progress{height:6px;background:#0d141c;border-radius:3px;margin-top:10px;overflow:hidden}
+.dose-card .progress-bar{height:100%;background:var(--grn);transition:width .3s}
+.dose-card .ai-cmp{font-size:11px;color:var(--dim);margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.dose-card .ai-cmp .diff{font-weight:600}
+.dose-card .ai-cmp .diff.good{color:var(--grn)}
+.dose-card .ai-cmp .diff.warn{color:var(--yel)}
+.dose-card .ai-cmp .diff.bad{color:var(--red)}
+
+/* Perf */
+.perf .score{font-size:32px;font-weight:700;margin:4px 0}
+.perf .verdict{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.perf.excellent .score,.perf.excellent .verdict{color:var(--grn)}
+.perf.good .score,.perf.good .verdict{color:#a3e635}
+.perf.fair .score,.perf.fair .verdict{color:var(--yel)}
+.perf.poor .score,.perf.poor .verdict{color:var(--red)}
+.perf .bar{height:4px;background:#0d141c;border-radius:2px;margin-top:6px;overflow:hidden}
+.perf .bar>div{height:100%;background:currentColor}
+
+/* Table */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:#141c28}
+tr:hover td{background:#1e2838}
+td.num{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Empty/error */
+.empty{padding:40px;text-align:center;color:var(--dim)}
+.err{padding:12px;background:#7f1d1d;color:#fca5a5;border-radius:6px;margin-bottom:12px;font-size:13px}
+
+/* Footer */
+footer{text-align:center;padding:16px;color:var(--dim);font-size:11px;margin-top:20px}
+</style>
+</head>
+<body>
+<div id="app" class="container">
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header>
+    <h1>
+      <span class="dot" :class="{on: live && live.is_online}"></span>
+      Greenhouse AI Dashboard
+    </h1>
+    <div class="controls">
+      <input v-model="deviceId" placeholder="device_id" style="width:200px">
+      <select v-model.number="refreshMs">
+        <option :value="3000">3 detik</option>
+        <option :value="5000">5 detik</option>
+        <option :value="10000">10 detik</option>
+        <option :value="0">Manual</option>
+      </select>
+      <button class="primary" @click="loadAll">🔄 Refresh</button>
+      <button class="export" @click="exportExcel">📊 Excel</button>
+      <button class="export" @click="exportPDF">📄 PDF</button>
+    </div>
+  </header>
+
+  <!-- Error banner -->
+  <div v-if="error" class="err">⚠ {{ error }}</div>
+
+  <!-- ═══════════ STATUS ═══════════ -->
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+    <div class="card">
+      <div class="label">AI Mode</div>
+      <span class="badge" :class="modeClass">{{ aiMode || 'unknown' }}</span>
+    </div>
+    <div class="card">
+      <div class="label">Device Status</div>
+      <span class="badge" :class="(live && live.is_online) ? 'online' : 'offline'">
+        {{ (live && live.is_online) ? 'Online' : 'Offline' }}
+      </span>
+    </div>
+    <div class="card">
+      <div class="label">Model Version</div>
+      <div class="value">v{{ modelVersion }}</div>
+    </div>
+    <div class="card">
+      <div class="label">Phase</div>
+      <div class="value">{{ phaseName(phase) }}</div>
+    </div>
+    <div class="card">
+      <div class="label">Last Seen</div>
+      <div class="value" style="font-size:16px">{{ lastSeenText }}</div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SENSOR ═══════════ -->
+  <h2>📡 Data Sensor</h2>
+  <div class="grid sensor" v-if="sensor">
+    <div class="card">
+      <div class="label">🌡 Suhu Udara</div>
+      <div class="value">{{ fmt(sensor.air_suhu,1) }}<span class="unit">°C</span></div>
+    </div>
+    <div class="card">
+      <div class="label">💧 Hum Udara</div>
+      <div class="value">{{ fmt(sensor.air_hum,1) }}<span class="unit">%</span></div>
+    </div>
+    <div class="card">
+      <div class="label">🌡 Suhu Tanah</div>
+      <div class="value">{{ fmt(sensor.tanah_suhu,1) }}<span class="unit">°C</span></div>
+    </div>
+    <div class="card">
+      <div class="label">💧 Kelembapan Tanah</div>
+      <div class="value">{{ fmt(sensor.tanah_lembap,1) }}<span class="unit">%</span></div>
+      <div class="progress" style="height:4px;background:#0d141c;border-radius:2px;margin-top:8px">
+        <div :style="{height:'100%',background:'#60a5fa',borderRadius:'2px',width: Math.min(100, sensor.tanah_lembap||0) + '%'}"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">🧪 pH</div>
+      <div class="value" :style="{color: phColor}">{{ fmt(sensor.ph,2) }}</div>
+    </div>
+    <div class="card">
+      <div class="label">⚡ EC</div>
+      <div class="value">{{ sensor.ec }}<span class="unit">µS</span></div>
+    </div>
+    <div class="card">
+      <div class="label">🌱 NPK</div>
+      <div class="value" style="font-size:16px">N:{{ sensor.n }} P:{{ sensor.p }} K:{{ sensor.k }}</div>
+    </div>
+  </div>
+  <div v-else class="empty">Menunggu data sensor...</div>
+
+  <!-- ═══════════ REKOMENDASI AI ═══════════ -->
+  <h2>🧠 Rekomendasi Dosis {{ latestDose ? '(' + srcLabel + ')' : '' }}</h2>
+  <div class="grid dose" v-if="latestDose">
+    <div class="dose-card" v-for="d in doseCards" :key="d.key">
+      <div class="name">{{ d.icon }} {{ d.label }}</div>
+      <div class="ml" :style="{color: d.ml > 0 ? 'var(--grn)' : 'var(--dim)'}">
+        {{ d.ml.toFixed(1) }}<span class="unit">mL</span>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" :style="{width: (d.ml / d.max * 100) + '%', background: d.ml > 0 ? 'var(--grn)' : 'var(--line)'}"></div>
+      </div>
+      <div class="sub">{{ ((d.ml / d.max) * 100).toFixed(0) }}% dari max {{ d.max }} mL</div>
+
+      <!-- AI vs Expert comparison -->
+      <div v-if="latestDose.ai_ml && latestDose.ai_ml.length === 4" class="ai-cmp">
+        <div style="display:flex;justify-content:space-between">
+          <span>Prediksi AI</span>
+          <span>{{ latestDose.ai_ml[d.idx].toFixed(1) }} mL</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:2px">
+          <span>Selisih</span>
+          <span class="diff" :class="diffClass(d.ml, latestDose.ai_ml[d.idx], d.max)">
+            {{ diffText(d.ml, latestDose.ai_ml[d.idx]) }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="empty">Belum ada rekomendasi. Pastikan ESP32 online & AI mode aktif.</div>
+
+  <!-- ═══════════ PERFORMA AI ═══════════ -->
+  <h2 v-if="analysis">📊 Performa AI ({{ analysis.n_samples }} sample)</h2>
+  <div class="grid perf" v-if="analysis">
+    <div class="card perf" :class="analysis.verdict">
+      <div class="label">Skor Keseluruhan</div>
+      <div class="score">{{ analysis.overall_score.toFixed(1) }}<span class="unit">%</span></div>
+      <div class="verdict">{{ analysis.verdict }}</div>
+      <div class="bar"><div :style="{width: analysis.overall_score + '%'}"></div></div>
+    </div>
+    <div class="card perf" v-for="(st, head) in analysis.stats" :key="head"
+         :class="st.match_pct >= 95 ? 'excellent' : st.match_pct >= 85 ? 'good' : st.match_pct >= 70 ? 'fair' : 'poor'">
+      <div class="label">{{ head }}</div>
+      <div class="score">{{ st.match_pct.toFixed(1) }}<span class="unit">%</span></div>
+      <div class="verdict">Match Rate</div>
+      <div class="bar"><div :style="{width: st.match_pct + '%'}"></div></div>
+      <div class="sub" style="margin-top:8px">
+        Mean diff: {{ st.mean_diff.toFixed(2) }} · P95: {{ st.p95_diff.toFixed(2) }}<br>
+        Outlier: {{ st.outlier_pct.toFixed(1) }}%
+      </div>
+    </div>
+  </div>
+  <div v-if="analysis && analysis.recommendation" class="card" style="margin-top:12px">
+    <div class="label">💡 Rekomendasi</div>
+    <div>{{ analysis.recommendation }}</div>
+  </div>
+  <div v-if="!analysis" class="empty" style="margin-top:0">
+    Belum ada analisa. Pastikan shadow mode jalan minimal 1 jam, lalu jalankan <code>POST /api/ai/analyze</code>.
+  </div>
+
+  <!-- ═══════════ RIWAYAT DOSIS ═══════════ -->
+  <h2>📜 Riwayat Dosis (20 terakhir)</h2>
+  <div class="card" style="padding:0;overflow:hidden">
+    <table v-if="history.length">
+      <thead>
+        <tr>
+          <th>Waktu</th>
+          <th>Sumber</th>
+          <th class="num">A</th>
+          <th class="num">B</th>
+          <th class="num">UP</th>
+          <th class="num">DN</th>
+          <th class="num">AI-A</th>
+          <th class="num">AI-B</th>
+          <th class="num">AI-UP</th>
+          <th class="num">AI-DN</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="h in history" :key="h.id">
+          <td>{{ fmtTime(h.timestamp) }}</td>
+          <td><span class="badge" :class="srcBadgeClass(h.src)">{{ h.src }}</span></td>
+          <td class="num">{{ (h.ml.A||0).toFixed(1) }}</td>
+          <td class="num">{{ (h.ml.B||0).toFixed(1) }}</td>
+          <td class="num">{{ (h.ml.PH_UP||0).toFixed(1) }}</td>
+          <td class="num">{{ (h.ml.PH_DOWN||0).toFixed(1) }}</td>
+          <td class="num" v-for="(v,i) in 4" :key="i">
+            {{ h.ai_ml && h.ai_ml[i] != null ? h.ai_ml[i].toFixed(1) : '—' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div v-else class="empty">Belum ada riwayat dosis.</div>
+  </div>
+
+  <footer>
+    Auto-refresh: {{ refreshMs > 0 ? (refreshMs/1000)+'s' : 'manual' }} ·
+    Update terakhir: {{ lastUpdateText }} ·
+    Vue 3 · Flask API
+  </footer>
+</div>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+    return {
+      deviceId: 'esp32_greenhouse_01',
+      refreshMs: 5000,
+      timer: null,
+      error: '',
+      lastUpdate: null,
+
+      live: null,          // /api/dashboard/live
+      aiStatus: null,      // /api/ai/status
+      aiModeData: null,    // /api/ai/mode
+      latestDose: null,    // /api/ai/dose?limit=1 -> [0]
+      history: [],         // /api/ai/dose?limit=20
+      analysis: null,      // /api/ai/analyze/latest
+    };
+  },
+
+  computed: {
+    sensor() { return this.live?.sensors || null; },
+    aiMode() { return this.live?.ai?.mode || this.aiModeData?.ai_mode || ''; },
+    modelVersion() { return this.aiStatus?.db_version ?? 0; },
+    phase() { return this.live?.ai?.phase ?? 1; },
+    modeClass() {
+      const m = this.aiMode;
+      return m === 'auto' ? 'auto' : m === 'shadow' ? 'shadow' : 'off';
+    },
+    phColor() {
+      const ph = this.sensor?.ph;
+      if (ph == null) return 'var(--txt)';
+      if (ph < 5.5) return 'var(--red)';
+      if (ph > 7.5) return 'var(--org)';
+      return 'var(--grn)';
+    },
+    lastSeenText() {
+      if (!this.live?.last_seen) return '—';
+      const t = new Date(this.live.last_seen);
+      const sec = Math.floor((Date.now() - t.getTime()) / 1000);
+      if (sec < 60) return sec + 's lalu';
+      if (sec < 3600) return Math.floor(sec/60) + 'm lalu';
+      return Math.floor(sec/3600) + 'j lalu';
+    },
+    lastUpdateText() {
+      if (!this.lastUpdate) return '—';
+      return this.lastUpdate.toLocaleTimeString();
+    },
+    srcLabel() {
+      const src = this.latestDose?.src;
+      return src === 'ai' ? 'AI Auto' :
+             src === 'expert_shadow' ? 'Shadow Mode' :
+             src === 'expert' ? 'Expert' : '';
+    },
+    doseCards() {
+      const d = this.latestDose;
+      if (!d) return [];
+      return [
+        { key:'A',       idx:0, label:'Dosing A',      icon:'💧', ml: d.ml.A||0,       max: 200 },
+        { key:'B',       idx:1, label:'Dosing B',      icon:'💧', ml: d.ml.B||0,       max: 200 },
+        { key:'PH_UP',   idx:2, label:'pH Up',         icon:'🧪', ml: d.ml.PH_UP||0,   max: 30  },
+        { key:'PH_DOWN', idx:3, label:'pH Down',       icon:'🧪', ml: d.ml.PH_DOWN||0, max: 30  },
+      ];
+    },
+  },
+
+  methods: {
+    async fetchJSON(url) {
+      const r = await fetch(url);
+      if (!r.ok) {
+        if (r.status === 404) return null;
+        throw new Error(`HTTP ${r.status} @ ${url}`);
+      }
+      return r.json();
+    },
+
+    async loadAll() {
+      this.error = '';
+      const d = encodeURIComponent(this.deviceId);
+      try {
+        const [live, stat, mode, doses, analysis] = await Promise.all([
+          this.fetchJSON(`/api/dashboard/live?device_id=${d}`),
+          this.fetchJSON(`/api/ai/status?device_id=${d}`),
+          this.fetchJSON(`/api/ai/mode?device_id=${d}`),
+          this.fetchJSON(`/api/ai/dose?device_id=${d}&limit=20`),
+          this.fetchJSON(`/api/ai/analyze/latest?device_id=${d}`).catch(() => null),
+        ]);
+        this.live = live;
+        this.aiStatus = stat;
+        this.aiModeData = mode;
+        this.history = doses || [];
+        this.latestDose = this.history[0] || null;
+        this.analysis = analysis;
+        this.lastUpdate = new Date();
+      } catch (e) {
+        this.error = 'Gagal ambil data: ' + e.message;
+      }
+    },
+
+    setupTimer() {
+      if (this.timer) clearInterval(this.timer);
+      if (this.refreshMs > 0) {
+        this.timer = setInterval(() => this.loadAll(), this.refreshMs);
+      }
+    },
+
+    // ───────── Format helpers ─────────
+    fmt(v, d=1) { return (v == null || isNaN(v)) ? '—' : Number(v).toFixed(d); },
+    fmtTime(iso) {
+      if (!iso) return '—';
+      const t = new Date(iso);
+      return t.toLocaleTimeString('id-ID', {hour12:false});
+    },
+    phaseName(p) { return ['Semai','Vegetatif','Generatif','Berbuah'][p] || '?'; },
+    srcBadgeClass(s) {
+      return s === 'ai' ? 'ai' : s === 'expert_shadow' ? 'shadow-src' : 'expert';
+    },
+    diffText(e, a) {
+      const d = a - e;
+      return (d >= 0 ? '+' : '') + d.toFixed(2) + ' mL';
+    },
+    diffClass(e, a, max) {
+      const ratio = Math.abs(a - e) / max;
+      if (ratio < 0.15) return 'good';
+      if (ratio < 0.30) return 'warn';
+      return 'bad';
+    },
+
+    // ───────── Export Excel ─────────
+    exportExcel() {
+      if (!this.latestDose && !this.sensor) {
+        alert('Belum ada data untuk diexport');
+        return;
+      }
+      const wb = XLSX.utils.book_new();
+
+      // Sheet 1 — Ringkasan Sensor
+      const sensorData = [
+        ['Parameter', 'Nilai', 'Satuan'],
+        ['Device ID', this.deviceId, ''],
+        ['AI Mode', this.aiMode, ''],
+        ['Model Version', 'v' + this.modelVersion, ''],
+        ['Phase', this.phaseName(this.phase), ''],
+        ['Waktu Export', new Date().toLocaleString('id-ID'), ''],
+        [],
+        ['Suhu Udara', this.sensor?.air_suhu ?? '', '°C'],
+        ['Hum Udara', this.sensor?.air_hum ?? '', '%'],
+        ['Suhu Tanah', this.sensor?.tanah_suhu ?? '', '°C'],
+        ['Kelembapan Tanah', this.sensor?.tanah_lembap ?? '', '%'],
+        ['pH', this.sensor?.ph ?? '', ''],
+        ['EC', this.sensor?.ec ?? '', 'µS/cm'],
+        ['Nitrogen (N)', this.sensor?.n ?? '', 'mg/kg'],
+        ['Phosphorus (P)', this.sensor?.p ?? '', 'mg/kg'],
+        ['Potassium (K)', this.sensor?.k ?? '', 'mg/kg'],
+      ];
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(sensorData), 'Sensor');
+
+      // Sheet 2 — Rekomendasi Dosis
+      if (this.latestDose) {
+        const d = this.latestDose;
+        const ai = d.ai_ml || [null,null,null,null];
+        const doseData = [
+          ['Parameter', 'Expert (mL)', 'AI (mL)', 'Selisih (mL)', 'Max (mL)'],
+          ['Dosing A',      d.ml.A||0,       ai[0] ?? '—', this.diffVal(d.ml.A||0, ai[0]),       200],
+          ['Dosing B',      d.ml.B||0,       ai[1] ?? '—', this.diffVal(d.ml.B||0, ai[1]),       200],
+          ['pH Up',         d.ml.PH_UP||0,   ai[2] ?? '—', this.diffVal(d.ml.PH_UP||0, ai[2]),   30],
+          ['pH Down',       d.ml.PH_DOWN||0, ai[3] ?? '—', this.diffVal(d.ml.PH_DOWN||0, ai[3]), 30],
+        ];
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(doseData), 'Dosis');
+      }
+
+      // Sheet 3 — Performa
+      if (this.analysis) {
+        const perfData = [
+          ['Performa AI', ''],
+          ['Skor', this.analysis.overall_score.toFixed(1) + '%'],
+          ['Verdict', this.analysis.verdict],
+          ['N Samples', this.analysis.n_samples],
+          ['Rekomendasi', this.analysis.recommendation],
+          [],
+          ['Head', 'Mean Diff', 'P95', 'Max', 'Match %', 'Outlier %'],
+        ];
+        for (const [h, s] of Object.entries(this.analysis.stats)) {
+          perfData.push([h, s.mean_diff, s.p95_diff, s.max_diff, s.match_pct, s.outlier_pct]);
+        }
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(perfData), 'Performa');
+      }
+
+      // Sheet 4 — Riwayat
+      const histData = [
+        ['Waktu', 'Sumber', 'Expert A', 'Expert B', 'Expert UP', 'Expert DN',
+         'AI A', 'AI B', 'AI UP', 'AI DN']
+      ];
+      for (const h of this.history) {
+        const ai = h.ai_ml || [null,null,null,null];
+        histData.push([
+          this.fmtTime(h.timestamp),
+          h.src,
+          h.ml.A||0, h.ml.B||0, h.ml.PH_UP||0, h.ml.PH_DOWN||0,
+          ai[0] ?? '', ai[1] ?? '', ai[2] ?? '', ai[3] ?? ''
+        ]);
+      }
+      XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(histData), 'Riwayat');
+
+      const fname = `greenhouse_${this.deviceId}_${Date.now()}.xlsx`;
+      XLSX.writeFile(wb, fname);
+    },
+
+    diffVal(e, a) {
+      if (a == null) return '—';
+      return (a - e).toFixed(2);
+    },
+
+    // ───────── Export PDF ─────────
+    exportPDF() {
+      if (!this.latestDose && !this.sensor) {
+        alert('Belum ada data untuk diexport');
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const PAGE_W = 210, MARGIN = 15;
+      let y = MARGIN;
+
+      // Header
+      doc.setFillColor(44, 97, 79);
+      doc.rect(0, 0, PAGE_W, 24, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Laporan Greenhouse AI', MARGIN, 12);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text(`Device: ${this.deviceId}  ·  ${new Date().toLocaleString('id-ID')}`, MARGIN, 19);
+
+      doc.setTextColor(30, 30, 30);
+      y = 34;
+
+      // Status
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Status Sistem', MARGIN, y); y += 6;
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text(`AI Mode: ${this.aiMode}   |   Model: v${this.modelVersion}   |   Phase: ${this.phaseName(this.phase)}`, MARGIN, y);
+      y += 8;
+
+      // Sensor table
+      doc.setFont('helvetica', 'bold');
+      doc.text('Data Sensor', MARGIN, y); y += 3;
+      doc.autoTable({
+        startY: y,
+        head: [['Parameter', 'Nilai', 'Satuan']],
+        body: [
+          ['Suhu Udara', this.fmt(this.sensor?.air_suhu, 1), '°C'],
+          ['Hum Udara', this.fmt(this.sensor?.air_hum, 1), '%'],
+          ['Suhu Tanah', this.fmt(this.sensor?.tanah_suhu, 1), '°C'],
+          ['Kelembapan Tanah', this.fmt(this.sensor?.tanah_lembap, 1), '%'],
+          ['pH', this.fmt(this.sensor?.ph, 2), ''],
+          ['EC', this.sensor?.ec ?? '—', 'µS/cm'],
+          ['NPK', `N:${this.sensor?.n ?? 0} P:${this.sensor?.p ?? 0} K:${this.sensor?.k ?? 0}`, 'mg/kg'],
+        ],
+        theme: 'striped',
+        headStyles: { fillColor: [44, 97, 79], textColor: 255 },
+        margin: { left: MARGIN, right: MARGIN },
+        styles: { fontSize: 9, cellPadding: 2 },
+      });
+      y = doc.lastAutoTable.finalY + 8;
+
+      // Dose table
+      if (this.latestDose) {
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text('Rekomendasi Dosis Terbaru', MARGIN, y); y += 3;
+        const d = this.latestDose;
+        const ai = d.ai_ml || [];
+        doc.autoTable({
+          startY: y,
+          head: [['Pompa', 'Expert (mL)', 'AI (mL)', 'Selisih', 'Max (mL)']],
+          body: [
+            ['Dosing A',   (d.ml.A||0).toFixed(1),       ai[0]?.toFixed(1) ?? '—', this.diffText(d.ml.A||0, ai[0]),       '200'],
+            ['Dosing B',   (d.ml.B||0).toFixed(1),       ai[1]?.toFixed(1) ?? '—', this.diffText(d.ml.B||0, ai[1]),       '200'],
+            ['pH Up',      (d.ml.PH_UP||0).toFixed(1),   ai[2]?.toFixed(1) ?? '—', this.diffText(d.ml.PH_UP||0, ai[2]),   '30'],
+            ['pH Down',    (d.ml.PH_DOWN||0).toFixed(1), ai[3]?.toFixed(1) ?? '—', this.diffText(d.ml.PH_DOWN||0, ai[3]), '30'],
+          ],
+          theme: 'grid',
+          headStyles: { fillColor: [30, 58, 95], textColor: 255 },
+          margin: { left: MARGIN, right: MARGIN },
+          styles: { fontSize: 9 },
+        });
+        y = doc.lastAutoTable.finalY + 8;
+      }
+
+      // Performance
+      if (this.analysis) {
+        if (y > 240) { doc.addPage(); y = MARGIN; }
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text(`Performa AI (${this.analysis.n_samples} sample)`, MARGIN, y); y += 3;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.text(`Skor: ${this.analysis.overall_score.toFixed(1)}%  ·  Verdict: ${this.analysis.verdict.toUpperCase()}`, MARGIN, y);
+        y += 5;
+        if (this.analysis.recommendation) {
+          const lines = doc.splitTextToSize(this.analysis.recommendation, PAGE_W - 2*MARGIN);
+          doc.text(lines, MARGIN, y); y += lines.length * 4 + 2;
+        }
+        doc.autoTable({
+          startY: y,
+          head: [['Head', 'Mean', 'P95', 'Max', 'Match %', 'Outlier %']],
+          body: Object.entries(this.analysis.stats).map(([h, s]) => [
+            h, s.mean_diff.toFixed(2), s.p95_diff.toFixed(2), s.max_diff.toFixed(2),
+            s.match_pct.toFixed(1)+'%', s.outlier_pct.toFixed(1)+'%'
+          ]),
+          theme: 'striped',
+          headStyles: { fillColor: [44, 97, 79], textColor: 255 },
+          margin: { left: MARGIN, right: MARGIN },
+          styles: { fontSize: 9 },
+        });
+        y = doc.lastAutoTable.finalY + 8;
+      }
+
+      // History (max 20)
+      if (this.history.length) {
+        if (y > 220) { doc.addPage(); y = MARGIN; }
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.text('Riwayat Dosis (20 terakhir)', MARGIN, y); y += 3;
+        doc.autoTable({
+          startY: y,
+          head: [['Waktu', 'Sumber', 'A', 'B', 'UP', 'DN', 'AI-A', 'AI-B', 'AI-UP', 'AI-DN']],
+          body: this.history.map(h => {
+            const ai = h.ai_ml || [];
+            return [
+              this.fmtTime(h.timestamp), h.src,
+              (h.ml.A||0).toFixed(1), (h.ml.B||0).toFixed(1),
+              (h.ml.PH_UP||0).toFixed(1), (h.ml.PH_DOWN||0).toFixed(1),
+              ai[0]?.toFixed(1) ?? '—', ai[1]?.toFixed(1) ?? '—',
+              ai[2]?.toFixed(1) ?? '—', ai[3]?.toFixed(1) ?? '—',
+            ];
+          }),
+          theme: 'grid',
+          headStyles: { fillColor: [30, 58, 95], textColor: 255 },
+          margin: { left: MARGIN, right: MARGIN },
+          styles: { fontSize: 7.5, cellPadding: 1.5 },
+        });
+      }
+
+      // Footer
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(120);
+        doc.text(
+          `Greenhouse AI Dashboard · Halaman ${i}/${totalPages}`,
+          PAGE_W / 2, 290, { align: 'center' }
+        );
+      }
+
+      doc.save(`laporan_greenhouse_${this.deviceId}_${Date.now()}.pdf`);
+    },
+  },
+
+  watch: {
+    refreshMs() { this.setupTimer(); },
+    deviceId() { this.loadAll(); },
+  },
+
+  mounted() {
+    this.loadAll();
+    this.setupTimer();
+  },
+
+  beforeUnmount() {
+    if (this.timer) clearInterval(this.timer);
+  }
+}).mount('#app');
+</script>
+</body>
+</html>

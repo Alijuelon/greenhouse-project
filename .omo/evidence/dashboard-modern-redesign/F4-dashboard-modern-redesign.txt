@@ -1,0 +1,4 @@
+F4 Ideal-State Fidelity Audit — Verdict: APPROVE
+1:1 mapping verified across IS-1..IS-10 and GAP-1..GAP-14.
+All 116 tests pass (including 8 golden PNGs across 4 states x 2 widths).
+Shortfalls: 0.

@@ -1,0 +1,71 @@
+# Task 11 - TimerBottomSheet: all durations reachable, 48dp targets, neutral copy
+
+Plan row: `- [ ] 11. Perbaiki TimerBottomSheet: semua durasi terjangkau, target 48dp, copy netral`
+Working dir for all commands: /home/ali-juelon/flutter/green_house_project/Green_House_App
+Date: 2026-11-05
+
+## Files
+- MODIFIED lib/features/dashboard/presentation/widgets/timer_bottom_sheet.dart
+- ADDED    test/dashboard/timer_sheet_test.dart
+Not touched: dashboard_page.dart, theme files, other widgets. `TimerBottomSheet.show(BuildContext)`
+signature unchanged (caller dashboard_page.dart still compiles; analyze below).
+
+## 1. flutter analyze
+$ flutter analyze
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 6.8s)
+
+## 2. Copy + hardcode sweep (expect 0 / 0)
+$ grep -c "melon" lib/features/dashboard/presentation/widgets/timer_bottom_sheet.dart
+0
+$ grep -cE "Color\(0x|fontSize:" lib/features/dashboard/presentation/widgets/timer_bottom_sheet.dart
+0
+$ grep -n "List.generate(_durations.length" lib/features/dashboard/presentation/widgets/timer_bottom_sheet.dart
+120:                    children: List.generate(_durations.length, _buildChip),
+
+## 3. Targeted suite (real per-test names)
+$ flutter test test/dashboard/timer_sheet_test.dart
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart
+00:00 +0: renders all five duration chips
+00:00 +1: tapping 60 then confirming resolves the sheet with 60
+00:00 +2: close button is >= 48x48 and dismisses with no value
+00:00 +3: every duration chip is at least a 48x48 tap target
+00:00 +4: chips expose button semantics with selected state
+00:01 +5: copy names Pompa Irigasi and never mentions melon
+00:01 +6: 320dp at 1.3x text scale renders without overflow
+00:01 +7: All tests passed!
+
+## 4. Negative control - the large-text probe is not vacuous
+Temporarily removed the `Expanded` around the header title (the pre-fix shape: unconstrained
+Row title next to the 48dp close button), then re-ran only the overflow test. It failed with a
+real RenderFlex overflow, proving the probe measures layout. File restored byte-identical
+(`diff -q` clean) and the positive run above re-executed after restore.
+$ flutter test test/dashboard/timer_sheet_test.dart --plain-name "320dp at 1.3x text scale renders without overflow"
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/timer_sheet_test.dart
+00:00 +0: 320dp at 1.3x text scale renders without overflow
+  Actual: FlutterError:<A RenderFlex overflowed by 259 pixels on the right.>
+00:00 +0 -1: 320dp at 1.3x text scale renders without overflow [E]
+00:00 +0 -1: Some tests failed.
+
+## 5. Full suite
+$ flutter test
+Failed to fetch settings for app bar: Exception: Failed to load settings
+00:11 +79: All tests passed!
+
+## What changed, mapped to the deliverable
+1. `List.generate(3, ...)` -> `List.generate(_durations.length, _buildChip)`; durations list
+   unchanged [5, 10, 15, 30, 60], so all five chips render and are tappable.
+2. Chips: `Semantics(button: true, selected: isSelected, label: '<n> menit', excludeSemantics: true)`
+   around `ConstrainedBox(minWidth/minHeight: AppSpacing.minTapTarget)` + `Material` + `InkWell`
+   (ripple, no GestureDetector). Close: `IconButton` with `constraints: BoxConstraints(minWidth:
+   AppSpacing.minTapTarget, minHeight: AppSpacing.minTapTarget)` and `Semantics(label: 'Tutup')`.
+   Chips sit in a `Wrap`, so 320dp @ TextScaler 1.3 wraps to two rows instead of overflowing.
+3. Copy: "Pilih durasi siram otomatis untuk Pompa Irigasi hari ini." (was "... blok hidroponik melon").
+4. Tokens: `AppRadius.radiusXl3` (sheet top), `AppRadius.radiusXl` (chips/CTA),
+   `AppRadius.radiusFull` (drag handle), `AppSpacing.*` for all padding/gaps/minTapTarget,
+   `AppTextStyles.headlineSm/bodySm/labelLg/caption`, `AppShadows.bottomSheet`.
+   Selected chip = `accentSoft` bg + `accentInk` fg; unselected = `cardMuted` bg + `textSecondary` fg.
+   Zero `Color(0x...)` and zero `fontSize:` remain in the file.
+5. `static Future<int?> show(BuildContext context)` untouched.

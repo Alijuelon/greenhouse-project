@@ -1,0 +1,78 @@
+TASK 9 - dashboard-modern-redesign: rebuild Npk7In1Card on tokens + per-metric no-data state
+Date: 2026-11-05T17:57:31+07:00
+Working dir: /home/ali-juelon/flutter/green_house_project/Green_House_App
+
+=== 1. flutter analyze ===
+$ flutter analyze
+Analyzing Green_House_App...                                    
+No issues found! (ran in 3.6s)
+
+=== 2. hardcoded-style greps (expect 0 each) ===
+$ grep -c "white38\|white54\|Color(0x" lib/features/dashboard/presentation/widgets/npk_7_in_1_card.dart
+0
+$ grep -c "fontSize:" lib/features/dashboard/presentation/widgets/npk_7_in_1_card.dart
+0
+$ grep -c "_legacyTelemetry" lib/features/dashboard/presentation/pages/dashboard_page.dart
+0
+$ grep -nE "(^|[^A-Za-z])Colors\." lib/features/dashboard/presentation/widgets/npk_7_in_1_card.dart | wc -l
+0
+$ grep -n "Npk7In1Card(" lib/features/dashboard/presentation/pages/dashboard_page.dart
+366:            Npk7In1Card(snapshot: snapshot),
+
+=== 3. widget tests for the card (per-test names) ===
+$ flutter test test/dashboard/npk_card_test.dart
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart
+00:00 +0: full payload renders N/P/K tiles and all four secondary metrics
+00:00 +1: null readings render an em dash and no alarm text
+00:00 +2: an empty payload replaces the body with the not-detected panel
+00:00 +3: soilOk false adds the Tanah bermasalah chip
+00:00 +4: offline payload shows the Basi freshness chip
+00:00 +5: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:00 +6: All tests passed!
+
+=== 4. full suite ===
+$ flutter test
+Failed to fetch settings for app bar: Exception: Failed to load settings
+00:09 +83: All tests passed!
+
+=== 5. adversarial checks ===
+null_data: n/ph/ec null -> 3x em dash, 2x 'Tidak ada data', zero '0', zero 'Rendah'/'Koreksi'/warning glyph.
+           asserted in 'null readings render an em dash and no alarm text' (find.text('0') findsNothing).
+misleading_success_output: every expectation above is printed per test name, not summarised.
+large-text probe: 360dp width + TextScaler.linear(1.3) with a null reading and soilOk=false ->
+           tester.takeException() is null (no RenderFlex overflow).
+
+=== 6. visual QA (rendered PNGs, inspected with the read tool) ===
+A throwaway probe (test/dashboard/_tmp_npk_visual_test.dart, deleted after use) rendered the card
+with the bundled fonts at 360dp/1.0x, 360dp/1.3x, 800dp/1.0x plus empty and partial payloads:
+  36104 bytes  /tmp/opencode/npk_empty.png
+  75745 bytes  /tmp/opencode/npk_full_800.png
+  82238 bytes  /tmp/opencode/npk_full.png
+  108922 bytes  /tmp/opencode/npk_partial_130.png
+  88016 bytes  /tmp/opencode/npk_partial.png
+Findings + fixes applied:
+  - NPK tiles had ragged heights (unit wrapped only under the 3-digit value) -> value and unit are
+    now stacked, so all three bars share one baseline at 360dp and 800dp.
+  - 'Target 220' wrapped to two lines at 1.3x -> wrapped in FittedBox(scaleDown) with softWrap:false.
+  - Header LIVE/Basi chip, 'Tanah bermasalah' chip, em-dash readings, empty panel and the
+    4-column layout at 800dp all render as intended; no clipping, no overlap, no dark text.
+  - Icons appear as empty squares only in the test renderer (MaterialIcons font is not loaded by
+    the probe); the app bundle ships it, so in-app icons are unaffected.
+
+=== 7. final re-check after the last doc-comment edit (no behaviour change) ===
+$ dart format lib/features/dashboard/presentation/widgets/npk_7_in_1_card.dart test/dashboard/npk_card_test.dart
+Formatted 2 files (0 changed) in 0.02 seconds.
+$ flutter analyze
+Analyzing Green_House_App...                                    
+No issues found! (ran in 3.2s)
+$ flutter test test/dashboard/npk_card_test.dart
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/npk_card_test.dart
+00:00 +0: full payload renders N/P/K tiles and all four secondary metrics
+00:00 +1: null readings render an em dash and no alarm text
+00:00 +2: an empty payload replaces the body with the not-detected panel
+00:00 +3: soilOk false adds the Tanah bermasalah chip
+00:00 +4: offline payload shows the Basi freshness chip
+00:00 +5: no RenderFlex overflow at 360dp with TextScaler 1.3
+00:00 +6: All tests passed!
+$ flutter test
+00:09 +83: All tests passed!

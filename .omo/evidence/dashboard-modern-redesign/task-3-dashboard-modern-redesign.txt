@@ -1,0 +1,329 @@
+TASK 3 - DashboardSnapshot model + tolerant mapper (dashboard-modern-redesign)
+Workspace: /home/ali-juelon/flutter/green_house_project/Green_House_App
+Flutter: Flutter 3.41.6 • channel stable • https://github.com/flutter/flutter.git
+Date: 2026-11-05T17:13:45+07:00
+
+$ flutter analyze
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing Green_House_App...                                    
+No issues found! (ran in 3.6s)
+
+EXIT_CODE=0
+
+$ flutter test test/dashboard/dashboard_snapshot_test.dart test/dashboard/dashboard_status_test.dart
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart
+00:00 +0: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - happy path reads every sensor, relay, and AI field from the real payload
+00:00 +1: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - happy path parses a last_seen value with an explicit UTC offset
+00:00 +2: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input empty payload yields nulls, six false relays, and auto mode
+00:00 +3: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input a short target_relays list is padded to six entries
+00:00 +4: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input a long target_relays list is truncated to six entries
+00:00 +5: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input single-entry target_relays (old RangeError payload) does not throw
+00:00 +6: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input garbage types never throw and collapse to safe defaults
+00:00 +7: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - empty and malformed input non-boolean relay entries fall back to false
+00:00 +8: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - numeric coercion numeric strings are parsed, non-numeric strings become null
+00:00 +9: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - numeric coercion non-finite numbers become null instead of NaN/Infinity
+00:00 +10: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode ai.mode wins over the legacy ai_mode key
+00:00 +11: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode legacy ai_mode is used when ai.mode is absent
+00:00 +12: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot.fromJson - AI mode missing AI block falls back to auto
+00:00 +13: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot - immutability relay lists cannot be mutated after construction
+00:00 +14: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart: DashboardSnapshot - immutability direct construction normalizes relay lists too
+00:00 +15: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline lastSeen 20 seconds ago is offline (default 15s threshold)
+00:00 +16: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline is_online false is offline even when lastSeen is fresh
+00:00 +17: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a missing lastSeen is offline
+00:00 +18: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline exactly 15 seconds old is still online, 1 ms later is offline
+00:00 +19: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - offline a custom staleAfter window is honored
+00:00 +20: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention pH 4.9 needs attention and reports the pH reason
+00:00 +21: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention temperature above the 24-30 C band needs attention
+00:00 +22: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention humidity below the 60-80 % band needs attention
+00:00 +23: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention EC below 300 needs attention
+00:00 +24: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil moisture below 40 % needs attention
+00:00 +25: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention soil_ok false needs attention even when all readings look fine
+00:00 +26: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - attention multiple faults produce multiple reasons in priority order
+00:00 +27: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal every reading inside the envelope is optimal
+00:00 +28: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - optimal values exactly on the bounds are still optimal
+00:00 +29: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings null readings never produce a reason and never force attention
+00:00 +30: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings an empty JSON payload is offline, not attention
+00:00 +31: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: resolveStatus - null readings partial payload keeps null metrics silent while flagging known faults
+00:00 +32: /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart: attentionReasons - immutability the returned list cannot be mutated
+00:00 +33: All tests passed!
+
+EXIT_CODE=0
+
+$ dart format --output=none --set-exit-if-changed lib/features/dashboard/domain test/dashboard
+Formatted 4 files (0 changed) in 0.01 seconds.
+EXIT_CODE=0
+
+$ flutter test test/dashboard/dashboard_snapshot_test.dart --plain-name "single-entry target_relays"
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart
+00:00 +0: DashboardSnapshot.fromJson - empty and malformed input single-entry target_relays (old RangeError payload) does not throw
+00:00 +1: All tests passed!
+EXIT_CODE=0
+
+$ flutter test test/dashboard/dashboard_snapshot_test.dart --plain-name "garbage types"
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_snapshot_test.dart
+00:00 +0: DashboardSnapshot.fromJson - empty and malformed input garbage types never throw and collapse to safe defaults
+00:00 +1: All tests passed!
+EXIT_CODE=0
+
+$ flutter test test/dashboard/dashboard_status_test.dart --plain-name "pH 4.9"
+Resolving dependencies...
+Downloading packages...
+  archive 4.0.9 (4.6.0 available)
+  audioplayers 6.7.1 (6.8.1 available)
+  audioplayers_android 5.2.1 (5.3.0 available)
+  audioplayers_darwin 6.4.0 (6.5.0 available)
+  audioplayers_linux 4.2.1 (4.3.0 available)
+  audioplayers_platform_interface 7.1.1 (7.2.0 available)
+  audioplayers_web 5.2.1 (5.3.0 available)
+  audioplayers_windows 4.3.1 (4.4.1 available)
+  clock 1.1.2 (1.1.3 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cross_file 0.3.5+5 (0.4.0 available)
+  crypto 3.0.7 (3.0.8 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  equatable 2.1.0 (3.0.0 available)
+  file_selector_macos 0.9.5+1 (0.9.5+2 available)
+  fl_chart 0.70.2 (1.3.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  image 4.10.1 (4.12.0 available)
+  image_picker 1.2.3 (1.2.4 available)
+  image_picker_android 0.8.13+17 (0.8.13+25 available)
+  image_picker_ios 0.8.13+7 (0.8.13+14 available)
+  image_picker_platform_interface 2.11.1 (2.11.2 available)
+  jni 1.0.3 (1.1.2 available)
+  jni_flutter 1.0.3 (1.0.4+1 available)
+  matcher 0.12.19 (0.12.20 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.17.0 (1.19.0 available)
+  objective_c 9.5.0 (9.6.3 available)
+  pdf 3.12.0 (3.13.1 available)
+  petitparser 7.0.2 (7.1.0 available)
+  platform 3.1.6 (3.2.0 available)
+  posix 6.5.2 (6.5.4 available)
+  printing 5.14.3 (5.15.1 available)
+  qr 3.0.2 (4.0.1 available)
+  record_use 0.6.0 (1.1.1 available)
+  stack_trace 1.12.1 (1.12.2 available)
+  synchronized 3.4.0+1 (3.5.0 available)
+  test_api 0.7.10 (0.7.15 available)
+  url_launcher 6.3.2 (6.3.3 available)
+  url_launcher_android 6.3.30 (6.3.33 available)
+  vector_math 2.2.0 (2.4.4 available)
+  vm_service 15.3.0 (15.4.0 available)
+  web 1.1.1 (1.1.2 available)
+  xml 6.6.1 (7.1.0 available)
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading /home/ali-juelon/flutter/green_house_project/Green_House_App/test/dashboard/dashboard_status_test.dart
+00:00 +0: resolveStatus - attention pH 4.9 needs attention and reports the pH reason
+00:00 +1: All tests passed!
+EXIT_CODE=0
+
+FILES CREATED (nothing else touched):
+  lib/features/dashboard/domain/dashboard_snapshot.dart
+  lib/features/dashboard/domain/dashboard_status.dart
+  test/dashboard/dashboard_snapshot_test.dart
+  test/dashboard/dashboard_status_test.dart
+
+$ wc -l <the four files>
+  184 lib/features/dashboard/domain/dashboard_snapshot.dart
+   92 lib/features/dashboard/domain/dashboard_status.dart
+  289 test/dashboard/dashboard_snapshot_test.dart
+  240 test/dashboard/dashboard_status_test.dart
+  805 total

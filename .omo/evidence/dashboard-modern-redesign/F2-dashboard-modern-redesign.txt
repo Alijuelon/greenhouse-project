@@ -1,0 +1,7 @@
+F2 Code Quality Review — Verdict: APPROVE
+- setState after await without mounted guard: 0
+- Timer & AppLifecycleListener cancelled/disposed in dispose(): verified at dashboard_page.dart:100-107
+- Sensor ?? 0.0 / ?? 0 fallbacks in lib/features/dashboard/**: 0
+- Raw Color(0x / fontSize: / Positioned( / Duration(milliseconds: in lib/features/dashboard/**: 0
+- dart format --output=none --set-exit-if-changed: Formatted 34 files (0 changed), exit 0
+- flutter analyze: No issues found!, exit 0

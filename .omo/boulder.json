@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "active_work_id": null,
+  "works": {
+    "dashboard-modern-redesign": {
+      "work_id": "dashboard-modern-redesign",
+      "active_plan": ".omo/plans/dashboard-modern-redesign.md",
+      "plan_name": "dashboard-modern-redesign",
+      "session_ids": ["codex:dashboard-modern-redesign-20261105"],
+      "status": "completed",
+      "worktree_path": null,
+      "worktree_deviation": "No VCS in workspace (git rev-parse: fatal: not a git repository) and the user explicitly declined git init. Task-owned git worktrees are therefore impossible; work happens in the main checkout with a pre-wave tar snapshot as the rollback boundary (see .omo/evidence/dashboard-modern-redesign/wave0-snapshot.txt).",
+      "snapshot": "/tmp/opencode/dashboard-pre-redesign-20261105-1711.tar.gz"
+    }
+  }
+}
